@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import {HomePage} from "./layouts/HomePage/HomePage";
-import {Navbar} from "./layouts/NavbarAndFooter/Navbar";
-import {Footer} from "./layouts/NavbarAndFooter/Footer";
+import {HomePage} from "./pages/HomePage/HomePage";
+import {Navbar} from "./components/NavbarAndFooter/Navbar";
+import {Footer} from "./components/NavbarAndFooter/Footer";
 
 function App() {
     return (
