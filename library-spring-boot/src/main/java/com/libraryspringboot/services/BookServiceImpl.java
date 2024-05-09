@@ -30,7 +30,6 @@ public class BookServiceImpl implements BookService {
 
     public BookDto getBookById(long bookId) {
         log.info("Get book id = {}", bookId);
-        BookDto bookDto = this.modelMapper.map(bookRepository.findById(bookId).orElse(null), BookDto.class);
-        return bookDto;
+        return this.modelMapper.map(bookRepository.findById(bookId).orElse(null), BookDto.class);
     }
 }
