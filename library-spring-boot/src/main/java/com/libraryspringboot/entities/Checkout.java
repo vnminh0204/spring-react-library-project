@@ -1,4 +1,4 @@
-package com.libraryspringboot.entity;
+package com.libraryspringboot.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +13,8 @@ import lombok.Data;
 @Data
 public class Checkout {
 
-    public Checkout() {}
+    public Checkout() {
+    }
 
     public Checkout(String userEmail, String checkoutDate, String returnDate, Long bookId) {
         this.userEmail = userEmail;

@@ -1,6 +1,6 @@
 package com.libraryspringboot.repos;
 
-import com.libraryspringboot.entity.Checkout;
+import com.libraryspringboot.entities.Checkout;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

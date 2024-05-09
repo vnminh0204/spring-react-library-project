@@ -1,6 +1,6 @@
 package com.libraryspringboot.repos;
 
-import com.libraryspringboot.entity.Review;
+import com.libraryspringboot.entities.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

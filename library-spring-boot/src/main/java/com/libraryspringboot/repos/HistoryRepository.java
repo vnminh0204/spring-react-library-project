@@ -1,6 +1,6 @@
 package com.libraryspringboot.repos;
 
-import com.libraryspringboot.entity.History;
+import com.libraryspringboot.entities.History;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

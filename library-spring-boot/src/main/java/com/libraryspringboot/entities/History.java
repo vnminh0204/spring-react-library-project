@@ -1,4 +1,4 @@
-package com.libraryspringboot.entity;
+package com.libraryspringboot.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,13 +9,13 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 
-
 @Entity
 @Table(name = "History")
 @Data
 public class History {
 
-    public History(){}
+    public History() {
+    }
 
     public History(String userEmail, String checkoutDate, String returnedDate, String title,
                    String author, String description, String img) {
@@ -29,29 +29,29 @@ public class History {
     }
 
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name="user_email")
+    @Column(name = "user_email")
     private String userEmail;
 
-    @Column(name="checkout_date")
+    @Column(name = "checkout_date")
     private String checkoutDate;
 
-    @Column(name="returned_date")
+    @Column(name = "returned_date")
     private String returnedDate;
 
-    @Column(name="title")
+    @Column(name = "title")
     private String title;
 
-    @Column(name="author")
+    @Column(name = "author")
     private String author;
 
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name="img")
+    @Column(name = "img")
     private String img;
 }
 

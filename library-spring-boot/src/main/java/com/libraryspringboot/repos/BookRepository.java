@@ -1,6 +1,6 @@
 package com.libraryspringboot.repos;
 
-import com.libraryspringboot.entity.Book;
+import com.libraryspringboot.entities.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +17,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findByCategory(@RequestParam("category") String category, Pageable pageable);
 
     @Query("select o from Book o where o.id in :book_ids")
-    List<Book> findBooksByBookIds (@Param("book_ids") List<Long> bookId);
+    List<Book> findBooksByBookIds(@Param("book_ids") List<Long> bookId);
 }
