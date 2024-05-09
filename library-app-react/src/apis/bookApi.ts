@@ -3,7 +3,6 @@ import {BASE_URL} from "../configs/env";
 export const BookApi = {
 
     async getAllBooks() {
-        const BASE_URL = "http://localhost:8080/api";
         const response = await fetch(`${BASE_URL}/books`);
         if (!response.ok) {
             throw new Error("Failed to fetch the books");
