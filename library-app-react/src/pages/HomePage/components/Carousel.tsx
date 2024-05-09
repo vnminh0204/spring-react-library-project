@@ -13,21 +13,7 @@ export const Carousel = () => {
     useEffect(() => {
         const fetchBooks = async () => {
             const responseData = await BookApi.getAllBooks();
-            console.log(responseData);
-            const loadedBooks: BookModel[] = [];
-
-            // for (const key in responseData) {
-            //     loadedBooks.push({
-            //         id: responseData[key].id,
-            //         title: responseData[key].title,
-            //         author: responseData[key].author,
-            //         description: responseData[key].description,
-            //         copies: responseData[key].copies,
-            //         copiesAvailable: responseData[key].copiesAvailable,
-            //         category: responseData[key].category,
-            //         img: responseData[key].img,
-            //     })
-            // }
+            const loadedBooks: BookModel[] = responseData as BookModel[];
 
             setBooks(loadedBooks);
             setIsLoading(false);
