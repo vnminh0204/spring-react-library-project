@@ -18,14 +18,14 @@ public class BookController {
     private final BookService bookService;
 
     @CrossOrigin
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<BookDto>> getAllBooks() {
         List<BookDto> books = bookService.getAllBooks();
         return ResponseEntity.ok().body(books);
     }
 
     @CrossOrigin
-    @GetMapping("/find/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<BookDto> getEmployeeById(@PathVariable("id") Long id) {
         BookDto bookDto = bookService.getBookById(id);
         return ResponseEntity.ok().body(bookDto);

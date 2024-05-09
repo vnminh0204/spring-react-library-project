@@ -14,15 +14,6 @@ import lombok.Data;
 @Table(name = "messages")
 @Data
 public class Message {
-
-    public Message() {
-    }
-
-    public Message(String title, String question) {
-        this.title = title;
-        this.question = question;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
