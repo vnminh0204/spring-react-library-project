@@ -9,6 +9,7 @@ export const BookApi = {
         }
         return response.json();
     },
+
     async getBookById(bookID: number) {
         const response = await fetch(`${BASE_URL}/books/${bookID}`);
         return response.json();
