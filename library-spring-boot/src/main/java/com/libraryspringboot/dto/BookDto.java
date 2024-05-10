@@ -20,5 +20,5 @@ public class BookDto {
 
     private String category;
 
-    private byte[] img;
+    private String img;
 }
