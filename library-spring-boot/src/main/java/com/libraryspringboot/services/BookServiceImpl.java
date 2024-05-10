@@ -6,6 +6,8 @@ import com.libraryspringboot.repos.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +22,10 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
 
-    public List<BookDto> getAllBooks() {
+    public Page<BookDto> getAllBooks(PageRequest pageRequest) {
         log.info("Get all books");
-        List<Book> books = bookRepository.findAll();
-        return books.stream()
-                .map(entity -> modelMapper.map(entity, BookDto.class))
-                .collect(Collectors.toList());
+        Page<Book> books = bookRepository.findAll(pageRequest);
+        return books.map(entity -> modelMapper.map(entity, BookDto.class));
     }
 
     public BookDto getBookById(long bookId) {

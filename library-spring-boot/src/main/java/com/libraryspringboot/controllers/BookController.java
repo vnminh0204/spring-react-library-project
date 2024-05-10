@@ -4,10 +4,10 @@ import com.libraryspringboot.dto.BookDto;
 import com.libraryspringboot.services.BookService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Tag(name = "Books")
@@ -19,8 +19,11 @@ public class BookController {
 
     @CrossOrigin
     @GetMapping("")
-    public ResponseEntity<List<BookDto>> getAllBooks() {
-        List<BookDto> books = bookService.getAllBooks();
+    public ResponseEntity<Page<BookDto>> getAllBooks(
+        @RequestParam(defaultValue = "0") Integer offset,
+        @RequestParam(defaultValue = "9") Integer limit
+        ) {
+        Page<BookDto> books = bookService.getAllBooks(PageRequest.of(offset, limit));
         return ResponseEntity.ok().body(books);
     }
 
