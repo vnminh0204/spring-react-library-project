@@ -15,16 +15,13 @@ export const SearchBooksPage = () => {
     const [booksPerPage] = useState(5);
     const [totalAmountOfBooks, setTotalAmountOfBooks] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const [search, setSearch] = useState('');
+    const [searchTitle, setSearchTitle] = useState('');
+    const [searchUrl, setSearchUrl] = useState('');
 
     useEffect(() => {
+        setIsLoading(true);
         const fetchBooks = async () => {
-            let responseData;
-            if (search === '') {
-                responseData = await BookApi.getAllBooks(currentPage-1, booksPerPage);
-            } else {
-                responseData = await BookApi.getBookContainingSearch(search, currentPage-1, booksPerPage);
-            }
+            const responseData = await BookApi.getAllBooks(currentPage-1, booksPerPage, searchUrl);
 
             const loadedBooks: BookModel[] = responseData.content as BookModel[];
 
@@ -39,10 +36,30 @@ export const SearchBooksPage = () => {
             setHttpError(errorMsg);
         })
         window.scrollTo(0, 0);
-    }, [currentPage, search]);
+    }, [currentPage, searchUrl, booksPerPage]);
 
-    const searchHandleChange = () => {
+
+    const searchTitleSubmitHandler = () => {
         setCurrentPage(1);
+        if (searchTitle === '') {
+            setSearchUrl('');
+        } else {
+            setSearchUrl(`/search/findByTitleContaining?title=${searchTitle}`)
+        }
+    }
+
+    const categorySelectHandler = (value: string) => {
+        setCurrentPage(1);
+        if (
+            value.toLowerCase() === 'fe' ||
+            value.toLowerCase() === 'be' ||
+            value.toLowerCase() === 'data' ||
+            value.toLowerCase() === 'devops'
+        ) {
+            setSearchUrl(`/search/findByCategory?category=${value}`)
+        } else {
+            setSearchUrl(``)
+        }
     }
 
     if (isLoading) {
@@ -75,9 +92,9 @@ export const SearchBooksPage = () => {
                             <div className='d-flex'>
                                 <input className='form-control me-2' type='search'
                                        placeholder='Search' aria-labelledby='Search'
-                                       onChange={e => setSearch(e.target.value)}
+                                       onChange={e => setSearchTitle(e.target.value)}
                                 />
-                                <button className='btn btn-outline-success' onClick={() => searchHandleChange()}>
+                                <button className='btn btn-outline-success' onClick={() => searchTitleSubmitHandler()}>
                                     Search
                                 </button>
                             </div>
@@ -90,27 +107,27 @@ export const SearchBooksPage = () => {
                                     Category
                                 </button>
                                 <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-                                    <li>
+                                    <li onClick={() => categorySelectHandler('All')}>
                                         <a className='dropdown-item' href='#'>
                                             All
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categorySelectHandler('FE')}>
                                         <a className='dropdown-item' href='#'>
                                             Front End
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categorySelectHandler('BE')}>
                                         <a className='dropdown-item' href='#'>
                                             Back End
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categorySelectHandler('Data')}>
                                         <a className='dropdown-item' href='#'>
                                             Data
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categorySelectHandler('DevOps')}>
                                         <a className='dropdown-item' href='#'>
                                             DevOps
                                         </a>
@@ -119,15 +136,29 @@ export const SearchBooksPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='mt-3'>
-                        <h5>Number of results: ({totalAmountOfBooks})</h5>
+                    {
+                        totalAmountOfBooks > 0 ?
+                    <>
+                        <div className='mt-3'>
+                            <h5>Number of results: ({totalAmountOfBooks})</h5>
+                        </div>
+                        <p>
+                            {indexOfFirstBook + 1} to {lastItem} of {totalAmountOfBooks} items:
+                        </p>
+                        {books.map(book => (
+                            <SearchBook book={book} key={book.id} />
+                        ))}
+                    </>
+                        :
+                    <div className='m-5'>
+                        <h3>
+                            Can't find what you are looking for?
+                        </h3>
+                        <a type='button' className='btn main-color btn-md px-4 me-md-2 fw-bold text-white' href='#'>
+                            Library Services
+                        </a>
                     </div>
-                    <p>
-                        {indexOfFirstBook + 1} to {lastItem} of {totalAmountOfBooks} items:
-                    </p>
-                    {books.map(book => (
-                        <SearchBook book={book} key={book.id} />
-                    ))}
+                    }
                     {/* Return pagination only if there are more than 1 page*/}
                     {totalPages > 1 && 
                         <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate}/>
