@@ -12,5 +12,7 @@ public interface BookService {
 
     Page<BookDto> findByTitleContaining(String title, Pageable pageRequest);
 
+    Page<BookDto> findByCategory(String category, Pageable pageRequest);
+
     BookDto getBookById(long bookId);
 }

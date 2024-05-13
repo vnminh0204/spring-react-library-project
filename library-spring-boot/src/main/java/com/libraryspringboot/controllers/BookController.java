@@ -45,4 +45,15 @@ public class BookController {
         Page<BookDto> books = bookService.findByTitleContaining(title, PageRequest.of(offset, limit));
         return ResponseEntity.ok().body(books);
     }
+
+    @CrossOrigin
+    @GetMapping("/search/findByCategory")
+    public ResponseEntity<Page<BookDto>> findByCategory(
+        @RequestParam("category") String category,
+        @RequestParam(defaultValue = "0") Integer offset,
+        @RequestParam(defaultValue = "10") Integer limit
+    ) {
+        Page<BookDto> books = bookService.findByCategory(category, PageRequest.of(offset, limit));
+        return ResponseEntity.ok().body(books);
+    }
 }

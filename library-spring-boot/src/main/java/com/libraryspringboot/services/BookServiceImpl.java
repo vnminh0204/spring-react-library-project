@@ -33,6 +33,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Page<BookDto> findByCategory(String category, Pageable pageRequest) {
+        Page<Book> books = bookRepository.findByCategory(category, pageRequest);
+        return books.map(entity -> modelMapper.map(entity, BookDto.class));
+    }
+
+    @Override
     public BookDto getBookById(long bookId) {
         log.info("Get book id = {}", bookId);
         return this.modelMapper.map(bookRepository.findById(bookId).orElse(null), BookDto.class);
