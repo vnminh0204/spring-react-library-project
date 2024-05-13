@@ -2,7 +2,7 @@ import {BASE_URL} from "../configs/env";
 
 export const BookApi = {
 
-    async getAllBooks(offset = 0, limit = 9, searchUrl = '?') {
+    async getAllBooks(offset = 0, limit = 9, searchUrl = '') {
         const response = await fetch(`${BASE_URL}/books${searchUrl.length > 0 ? searchUrl + '&' : '?'}offset=${offset}&limit=${limit}`);
         if (!response.ok) {
             throw new Error("Failed to fetch the books");
