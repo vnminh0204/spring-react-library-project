@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import {BookModel} from "../../models/BookModel";
-import {SpinnerLoading} from "../../utils/SpinnerLoading";
+import {SpinnerLoading} from "../../common/SpinnerLoading/SpinnerLoading";
 import {BookApi} from "../../apis/bookApi";
 import {useParams} from "react-router-dom";
 import {StarsReview} from "./components/StarsReview";
 import {CheckoutAndReviewBox} from "./components/CheckoutAndReviewBox";
+import {ReviewModel} from "../../models/ReviewModel";
+import {ReviewApi} from "../../apis/reviewApi";
+import {LatestReviews} from "./components/LatestReviews";
 
 
 export const BookCheckoutPage = () => {
@@ -13,6 +16,11 @@ export const BookCheckoutPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [httpError, setHttpError] = useState<string>('');
     const {bookId} = useParams();
+
+    // Review State
+    const [reviews, setReviews] = useState<ReviewModel[]>([]);
+    const [totalStars, setTotalStars] = useState(0);
+    const [isLoadingReview, setIsLoadingReview] = useState(true);
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -30,8 +38,33 @@ export const BookCheckoutPage = () => {
         });
     }, [bookId]);
 
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const responseData = await ReviewApi.getReviewsByBookId(bookId);
+            const loadedReviews: ReviewModel[] = responseData.content as ReviewModel[];
 
-    if (isLoading || !book) {
+            const weightedStarReviews = loadedReviews.reduce((sum, review) => {
+                return sum + review.rating;
+            }, 0);
+
+            if (loadedReviews) {
+                const round = (Math.round((weightedStarReviews / loadedReviews.length) * 2) / 2).toFixed(1);
+                setTotalStars(Number(round));
+            }
+
+            setReviews(loadedReviews);
+            setIsLoadingReview(false);
+        };
+
+        fetchReviews().catch((error: any) => {
+            const errorMsg = 'Error fetching books:' + error;
+            setIsLoadingReview(false);
+            setHttpError(errorMsg);
+        });
+    }, [bookId]);
+
+
+    if (isLoading || isLoadingReview) {
         return (
             <SpinnerLoading />
         )
@@ -62,12 +95,13 @@ export const BookCheckoutPage = () => {
                             <h2>{book?.title}</h2>
                             <h5 className='text-primary'>{book?.author}</h5>
                             <p className='lead'>{book?.description}</p>
-                            <StarsReview rating={4} size={32}/>
+                            <StarsReview rating={totalStars} size={32}/>
                         </div>
                     </div>
                     <CheckoutAndReviewBox book={book} mobile={false}/>
                 </div>
                 <hr />
+                <LatestReviews reviews={reviews} bookId={Number(bookId)} mobile={false}/>
             </div>
             <div className='container d-lg-none mt-5'>
                 <div className='d-flex justify-content-center align-items-center'>
@@ -83,10 +117,12 @@ export const BookCheckoutPage = () => {
                         <h2>{book?.title}</h2>
                         <h5 className='text-primary'>{book?.author}</h5>
                         <p className='lead'>{book?.description}</p>
+                        <StarsReview rating={totalStars} size={32}/>
                     </div>
                 </div>
                 <CheckoutAndReviewBox book={book} mobile={true}/>
                 <hr />
+                <LatestReviews reviews={reviews} bookId={Number(bookId)} mobile={true}/>
             </div>
         </div>
     );

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 
 import {BookApi} from "../../apis/bookApi";
 import {BookModel} from "../../models/BookModel";
-import {SpinnerLoading} from "../../utils/SpinnerLoading";
+import {SpinnerLoading} from "../../common/SpinnerLoading/SpinnerLoading";
 import {SearchBook} from "./components/SearchBook";
-import {Pagination} from "../../components/Pagination/Pagination";
+import {Pagination} from "../../common/Pagination/Pagination";
 
 export const SearchBooksPage = () => {
 

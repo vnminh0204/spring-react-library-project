@@ -3,7 +3,7 @@ import './App.css';
 import {HomePage} from "./pages/HomePage/HomePage";
 import {SearchBooksPage} from "./pages/SearchBooksPage/SearchBooksPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Layout from "./components/Layout/Layout";
+import Layout from "./common/Layout/Layout";
 import {BookCheckoutPage} from "./pages/BookCheckOutPage/BookCheckoutPage";
 
 function App() {
