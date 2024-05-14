@@ -108,29 +108,29 @@ export const SearchBooksPage = () => {
                                 </button>
                                 <ul className='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
                                     <li onClick={() => categorySelectHandler('All')}>
-                                        <a className='dropdown-item' href='#'>
+                                        <span className='dropdown-item'>
                                             All
-                                        </a>
+                                        </span>
                                     </li>
                                     <li onClick={() => categorySelectHandler('FE')}>
-                                        <a className='dropdown-item' href='#'>
+                                        <span className='dropdown-item'>
                                             Front End
-                                        </a>
+                                        </span>
                                     </li>
                                     <li onClick={() => categorySelectHandler('BE')}>
-                                        <a className='dropdown-item' href='#'>
+                                        <span className='dropdown-item'>
                                             Back End
-                                        </a>
+                                        </span>
                                     </li>
                                     <li onClick={() => categorySelectHandler('Data')}>
-                                        <a className='dropdown-item' href='#'>
+                                        <span className='dropdown-item'>
                                             Data
-                                        </a>
+                                        </span>
                                     </li>
                                     <li onClick={() => categorySelectHandler('DevOps')}>
-                                        <a className='dropdown-item' href='#'>
+                                        <span className='dropdown-item'>
                                             DevOps
-                                        </a>
+                                        </span>
                                     </li>
                                 </ul>
                             </div>
