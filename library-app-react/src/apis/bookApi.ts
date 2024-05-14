@@ -10,7 +10,10 @@ export const BookApi = {
         return response.json();
     },
 
-    async getBookById(bookID: number) {
+    async getBookById(bookID: string  | undefined) {
+        if (!bookID) {
+            throw new Error("Book ID is missing");
+        }
         const response = await fetch(`${BASE_URL}/books/${bookID}`);
         return response.json();
     },

@@ -1,6 +1,6 @@
 
-import { StarsReview } from "./StarsReview";
 import {ReviewModel} from "../models/ReviewModel";
+import {StarsReview} from "../components/StarsReview/StarsReview";
 
 
 export const Review: React.FC<{ review: ReviewModel }> = (props) => {

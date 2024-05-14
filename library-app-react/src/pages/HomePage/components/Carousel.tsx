@@ -9,7 +9,7 @@ export const Carousel = () => {
 
     const [books, setBooks] = useState<BookModel[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [httpError, setHttpError] = useState('');
+    const [httpError, setHttpError] = useState<string>('');
 
     useEffect(() => {
         const fetchBooks = async () => {

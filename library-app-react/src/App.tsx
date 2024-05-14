@@ -4,6 +4,7 @@ import {HomePage} from "./pages/HomePage/HomePage";
 import {SearchBooksPage} from "./pages/SearchBooksPage/SearchBooksPage";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Layout from "./components/Layout/Layout";
+import {BookCheckoutPage} from "./pages/BookCheckOutPage/BookCheckoutPage";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                     <Route path="" element={<HomePage/>} />
                     <Route path="home" element={<HomePage/>} />
                     <Route path="search" element={<SearchBooksPage/>} />
+                    <Route path="checkout/:bookId" element={<BookCheckoutPage/>}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

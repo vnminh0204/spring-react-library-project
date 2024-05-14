@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StarsReview } from './StarsReview';
+import { StarsReview } from '../components/StarsReview/StarsReview';
 
 export const LeaveAReview: React.FC<{ submitReview: any }> = (props) => {
 
