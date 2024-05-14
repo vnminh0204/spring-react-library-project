@@ -50,7 +50,7 @@ public class BookController {
     public ResponseEntity<Page<BookDto>> findByCategory(
         @RequestParam("category") String category,
         @RequestParam(defaultValue = "0") Integer offset,
-        @RequestParam(defaultValue = "10") Integer limit
+        @RequestParam(defaultValue = "9") Integer limit
     ) {
         Page<BookDto> books = bookService.findByCategory(category, PageRequest.of(offset, limit));
         return ResponseEntity.ok().body(books);
