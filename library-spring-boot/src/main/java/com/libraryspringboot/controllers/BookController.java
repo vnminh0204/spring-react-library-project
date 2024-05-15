@@ -20,9 +20,9 @@ public class BookController {
     @CrossOrigin
     @GetMapping("")
     public ResponseEntity<Page<BookDto>> getAllBooks(
-        @RequestParam(defaultValue = "0") Integer offset,
-        @RequestParam(defaultValue = "9") Integer limit
-        ) {
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "9") Integer limit
+    ) {
         Page<BookDto> books = bookService.getAllBooks(PageRequest.of(offset, limit));
         return ResponseEntity.ok().body(books);
     }
@@ -37,9 +37,9 @@ public class BookController {
     @CrossOrigin
     @GetMapping("/search/findByTitleContaining")
     public ResponseEntity<Page<BookDto>> findByTitleContaining(
-        @RequestParam("title") String title,
-        @RequestParam(defaultValue = "0") Integer offset,
-        @RequestParam(defaultValue = "10") Integer limit
+            @RequestParam("title") String title,
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "10") Integer limit
     ) {
         Page<BookDto> books = bookService.findByTitleContaining(title, PageRequest.of(offset, limit));
         return ResponseEntity.ok().body(books);
@@ -48,11 +48,37 @@ public class BookController {
     @CrossOrigin
     @GetMapping("/search/findByCategory")
     public ResponseEntity<Page<BookDto>> findByCategory(
-        @RequestParam("category") String category,
-        @RequestParam(defaultValue = "0") Integer offset,
-        @RequestParam(defaultValue = "9") Integer limit
+            @RequestParam("category") String category,
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "9") Integer limit
     ) {
         Page<BookDto> books = bookService.findByCategory(category, PageRequest.of(offset, limit));
         return ResponseEntity.ok().body(books);
+    }
+
+    @CrossOrigin
+    @PutMapping("/secure/checkout")
+    public ResponseEntity<BookDto> findByUserEmailAndBookId(
+            @RequestParam String userEmail,
+            @RequestParam Long bookId
+    ) throws Exception {
+        return ResponseEntity.ok().body(bookService.checkoutBook(userEmail, bookId));
+    }
+
+    @CrossOrigin
+    @GetMapping("secure/ischeckout/byuser")
+    public ResponseEntity<Boolean> checkoutBookByUser(
+            @RequestParam String userEmail,
+            @RequestParam Long bookId
+    ) {
+        return ResponseEntity.ok().body(bookService.checkoutBookByUser(userEmail, bookId));
+    }
+
+    @CrossOrigin
+    @GetMapping("secure/currentloans/count")
+    public ResponseEntity<Integer> currentLoansCount(
+            @RequestParam String userEmail
+    ) {
+        return ResponseEntity.ok().body(bookService.currentLoansCount(userEmail));
     }
 }

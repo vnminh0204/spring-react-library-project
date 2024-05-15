@@ -13,4 +13,10 @@ public interface BookService {
     Page<BookDto> findByCategory(String category, Pageable pageRequest);
 
     BookDto getBookById(long bookId);
+
+    BookDto checkoutBook(String userEmail, Long bookId) throws Exception;
+
+    Boolean checkoutBookByUser(String userEmail, Long bookId);
+
+    Integer currentLoansCount(String userEmail);
 }
