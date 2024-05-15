@@ -6,17 +6,13 @@ import {Route, Routes, useNavigate} from "react-router-dom";
 import Layout from "./common/Layout/Layout";
 import {BookCheckoutPage} from "./pages/BookCheckOutPage/BookCheckoutPage";
 import {oktaConfig} from "./configs/oktaConfig";
-import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
-import LoginWidget from "./common/Auth/LoginWidget";
+import {OktaAuth, toRelativeUrl} from '@okta/okta-auth-js';
 import {LoginCallback, Security} from "@okta/okta-react";
-
-// TODO later remove Okta with own implementation
+import OktaSignInWidget from "./common/Auth/OktaSignInWidget";
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
 export function App() {
-
-    console.log(oktaAuth);
 
     const navigate = useNavigate();
 
@@ -36,7 +32,7 @@ export function App() {
                     <Route path="home" element={<HomePage/>}/>
                     <Route path="search" element={<SearchBooksPage/>}/>
                     <Route path="checkout/:bookId" element={<BookCheckoutPage/>}></Route>
-                    <Route path="login" element={<LoginWidget/>}></Route>
+                    <Route path="login" element={<OktaSignInWidget/>}></Route>
                     <Route path="login/callback" element={<LoginCallback/>}></Route>
                 </Route>
             </Routes>
