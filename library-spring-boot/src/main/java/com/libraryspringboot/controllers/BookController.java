@@ -58,7 +58,7 @@ public class BookController {
     }
 
     @CrossOrigin
-    @PutMapping("/secure/checkout")
+    @PutMapping("/secure/checkout/")
     public ResponseEntity<BookDto> checkoutBook(
             Authentication authentication,
             @RequestParam Long bookId
@@ -68,7 +68,7 @@ public class BookController {
     }
 
     @CrossOrigin
-    @GetMapping("secure/ischeckout/byuser")
+    @GetMapping("secure/ischeckedout/byuser/")
     public ResponseEntity<Boolean> checkoutBookByUser(
             Authentication authentication,
             @RequestParam Long bookId

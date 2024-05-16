@@ -41,7 +41,7 @@ const OktaSignInWidget = () => {
         }).then(onSuccess).catch(onError);
 
         return () => widget.remove();
-    }, []);
+    });
 
     if (!authState) {
         return (<SpinnerLoading/>);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
 import {BookApi} from "../../apis/bookApi";
 import {BookModel} from "../../models/BookModel";
@@ -21,7 +21,7 @@ export const SearchBooksPage = () => {
     useEffect(() => {
         setIsLoading(true);
         const fetchBooks = async () => {
-            const responseData = await BookApi.getAllBooks(currentPage-1, booksPerPage, searchUrl);
+            const responseData = await BookApi.getAllBooks(currentPage - 1, booksPerPage, searchUrl);
 
             const loadedBooks: BookModel[] = responseData.content as BookModel[];
 
@@ -64,7 +64,7 @@ export const SearchBooksPage = () => {
 
     if (isLoading) {
         return (
-            <SpinnerLoading />
+            <SpinnerLoading/>
         )
     }
 
@@ -81,7 +81,7 @@ export const SearchBooksPage = () => {
     let lastItem = booksPerPage * currentPage <= totalAmountOfBooks ?
         booksPerPage * currentPage : totalAmountOfBooks;
 
-    const paginate = (pageNumber:  number) => setCurrentPage(pageNumber);
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
         <div>
@@ -138,29 +138,30 @@ export const SearchBooksPage = () => {
                     </div>
                     {
                         totalAmountOfBooks > 0 ?
-                    <>
-                        <div className='mt-3'>
-                            <h5>Number of results: ({totalAmountOfBooks})</h5>
-                        </div>
-                        <p>
-                            {indexOfFirstBook + 1} to {lastItem} of {totalAmountOfBooks} items:
-                        </p>
-                        {books.map(book => (
-                            <SearchBook book={book} key={book.id} />
-                        ))}
-                    </>
-                        :
-                    <div className='m-5'>
-                        <h3>
-                            Can't find what you are looking for?
-                        </h3>
-                        <a type='button' className='btn main-color btn-md px-4 me-md-2 fw-bold text-white' href='#'>
-                            Library Services
-                        </a>
-                    </div>
+                            <>
+                                <div className='mt-3'>
+                                    <h5>Number of results: ({totalAmountOfBooks})</h5>
+                                </div>
+                                <p>
+                                    {indexOfFirstBook + 1} to {lastItem} of {totalAmountOfBooks} items:
+                                </p>
+                                {books.map(book => (
+                                    <SearchBook book={book} key={book.id}/>
+                                ))}
+                            </>
+                            :
+                            <div className='m-5'>
+                                <h3>
+                                    Can't find what you are looking for?
+                                </h3>
+                                <a type='button' className='btn main-color btn-md px-4 me-md-2 fw-bold text-white'
+                                   href='#'>
+                                    Library Services
+                                </a>
+                            </div>
                     }
                     {/* Return pagination only if there are more than 1 page*/}
-                    {totalPages > 1 && 
+                    {totalPages > 1 &&
                         <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate}/>
                     }
                 </div>
