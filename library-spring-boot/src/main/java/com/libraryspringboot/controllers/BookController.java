@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -58,27 +59,30 @@ public class BookController {
 
     @CrossOrigin
     @PutMapping("/secure/checkout")
-    public ResponseEntity<BookDto> findByUserEmailAndBookId(
-            @RequestParam String userEmail,
+    public ResponseEntity<BookDto> checkoutBook(
+            Authentication authentication,
             @RequestParam Long bookId
     ) throws Exception {
+        String userEmail = authentication.getName();
         return ResponseEntity.ok().body(bookService.checkoutBook(userEmail, bookId));
     }
 
     @CrossOrigin
     @GetMapping("secure/ischeckout/byuser")
     public ResponseEntity<Boolean> checkoutBookByUser(
-            @RequestParam String userEmail,
+            Authentication authentication,
             @RequestParam Long bookId
     ) {
+        String userEmail = authentication.getName();
         return ResponseEntity.ok().body(bookService.checkoutBookByUser(userEmail, bookId));
     }
 
     @CrossOrigin
     @GetMapping("secure/currentloans/count")
     public ResponseEntity<Integer> currentLoansCount(
-            @RequestParam String userEmail
+            Authentication authentication
     ) {
+        String userEmail = authentication.getName();
         return ResponseEntity.ok().body(bookService.currentLoansCount(userEmail));
     }
 }
