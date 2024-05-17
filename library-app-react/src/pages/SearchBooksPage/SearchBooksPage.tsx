@@ -5,6 +5,7 @@ import {BookModel} from "../../models/BookModel";
 import {SpinnerLoading} from "../../common/SpinnerLoading/SpinnerLoading";
 import {SearchBook} from "./components/SearchBook";
 import {Pagination} from "../../common/Pagination/Pagination";
+import {PaginationProgress} from "../../common/Pagination/PaginationProgress";
 
 export const SearchBooksPage = () => {
 
@@ -76,13 +77,6 @@ export const SearchBooksPage = () => {
         )
     }
 
-    const indexOfLastBook: number = currentPage * booksPerPage;
-    const indexOfFirstBook: number = indexOfLastBook - booksPerPage;
-    let lastItem = booksPerPage * currentPage <= totalAmountOfBooks ?
-        booksPerPage * currentPage : totalAmountOfBooks;
-
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
     return (
         <div>
             <div className='container'>
@@ -142,9 +136,7 @@ export const SearchBooksPage = () => {
                                 <div className='mt-3'>
                                     <h5>Number of results: ({totalAmountOfBooks})</h5>
                                 </div>
-                                <p>
-                                    {indexOfFirstBook + 1} to {lastItem} of {totalAmountOfBooks} items:
-                                </p>
+                                <PaginationProgress currentPage={currentPage} totalAmountOfItems={totalAmountOfBooks} totalPages={totalPages} itemsPerPage={booksPerPage}/>
                                 {books.map(book => (
                                     <SearchBook book={book} key={book.id}/>
                                 ))}
@@ -162,7 +154,7 @@ export const SearchBooksPage = () => {
                     }
                     {/* Return pagination only if there are more than 1 page*/}
                     {totalPages > 1 &&
-                        <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate}/>
+                        <Pagination currentPage={currentPage} totalPages={totalPages} paginate={setCurrentPage}/>
                     }
                 </div>
             </div>
