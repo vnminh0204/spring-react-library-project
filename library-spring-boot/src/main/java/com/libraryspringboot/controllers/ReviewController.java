@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,7 +33,8 @@ public class ReviewController {
       @RequestParam(defaultValue = "0") Integer offset,
       @RequestParam(defaultValue = "9") Integer limit
   ) {
-    Page<ReviewDto> reviews = reviewService.getReviewsByBookId(bookId, PageRequest.of(offset, limit));
+    var sortOrder = Sort.by("date").descending();
+    Page<ReviewDto> reviews = reviewService.getReviewsByBookId(bookId, PageRequest.of(offset, limit, sortOrder));
     return ResponseEntity.ok().body(reviews);
   }
 
