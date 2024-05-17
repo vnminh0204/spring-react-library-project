@@ -25,6 +25,9 @@ export const BookCheckoutPage = () => {
     const [totalStars, setTotalStars] = useState(0);
     const [isLoadingReview, setIsLoadingReview] = useState(true);
 
+    const [isReviewLeft, setIsReviewLeft] = useState(false);
+    const [isLoadingUserReview, setIsLoadingUserReview] = useState(false);
+
     // Loans Count State
     const [currentLoansCount, setCurrentLoansCount] = useState(0);
     const [isLoadingCurrentLoansCount, setIsLoadingCurrentLoansCount] = useState(true);
@@ -72,7 +75,7 @@ export const BookCheckoutPage = () => {
             setIsLoadingReview(false);
             setHttpError(errorMsg);
         });
-    }, [bookId]);
+    }, [bookId, isReviewLeft]);
 
     useEffect(() => {
         const fetchUserCurrentLoansCount = async () => {
@@ -98,7 +101,20 @@ export const BookCheckoutPage = () => {
         })
     }, [authState, bookId]);
 
-    if (isLoading || isLoadingReview || isLoadingCurrentLoansCount || isLoadingBookCheckedOut) {
+    useEffect(() => {
+        const fetchUserReviewBook = async () => {
+            const userReviewResponseJson = await BookApi.getUserReviewBook(authState, bookId);
+            setIsReviewLeft(userReviewResponseJson);
+
+            setIsLoadingUserReview(false);
+        }
+        fetchUserReviewBook().catch((error: any) => {
+            setIsLoadingUserReview(false);
+            setHttpError(error.message);
+        })
+    }, [authState, bookId]);
+
+    if (isLoading || isLoadingReview || isLoadingCurrentLoansCount || isLoadingBookCheckedOut || isLoadingUserReview) {
         return (
             <SpinnerLoading/>
         )
@@ -115,6 +131,11 @@ export const BookCheckoutPage = () => {
     const checkoutBook = async () => {
         await BookApi.putCheckoutBook(authState, bookId);
         setIsCheckedOut(true);
+    }
+
+    const submitReview = async (starInput: number, reviewDescription: string)=> {
+        await ReviewApi.postSubmitReview(authState, bookId, starInput, reviewDescription);
+        setIsReviewLeft(true);
     }
 
     return (
@@ -144,6 +165,8 @@ export const BookCheckoutPage = () => {
                         isAuthenticated={authState?.isAuthenticated}
                         isCheckedOut={isCheckedOut}
                         checkoutBook={checkoutBook}
+                        isReviewLeft={isReviewLeft}
+                        submitReview={submitReview}
                     />
                 </div>
                 <hr/>
@@ -173,6 +196,8 @@ export const BookCheckoutPage = () => {
                     isAuthenticated={authState?.isAuthenticated}
                     isCheckedOut={isCheckedOut}
                     checkoutBook={checkoutBook}
+                    isReviewLeft={isReviewLeft}
+                    submitReview={submitReview}
                 />
                 <hr/>
                 <LatestReviews reviews={reviews} bookId={Number(bookId)} mobile={true}/>

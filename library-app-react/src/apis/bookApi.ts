@@ -1,5 +1,4 @@
 import {BASE_URL} from "../configs/env";
-import {ReviewRequestModel} from "../models/ReviewRequestModel";
 
 export const BookApi = {
 
@@ -102,20 +101,4 @@ export const BookApi = {
             throw new Error('Something went wrong!');
         }
     },
-    async postSubmitReview(authState: any, bookId: string | undefined, starInput: number, reviewDescription: string) {
-        const reviewRequestModel: ReviewRequestModel = {rating: starInput, bookId: Number(bookId), reviewDescription};
-        const url = `${BASE_URL}/reviews/secure`;
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reviewRequestModel)
-        };
-        const returnResponse = await fetch(url, requestOptions);
-        if (!returnResponse.ok) {
-            throw new Error('Something went wrong!');
-        }
-    }
 };

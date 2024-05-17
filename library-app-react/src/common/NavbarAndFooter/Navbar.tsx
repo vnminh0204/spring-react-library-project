@@ -11,6 +11,8 @@ export const Navbar = () => {
         return <SpinnerLoading/>
     }
 
+    console.log(authState);
+
     const handleLogout = async () => oktaAuth.signOut();
 
     return (

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StarsReview } from '../common/StarsReview/StarsReview';
+import { StarsReview } from '../StarsReview/StarsReview';
 
 export const LeaveAReview: React.FC<{ submitReview: any }> = (props) => {
 
@@ -50,7 +50,6 @@ export const LeaveAReview: React.FC<{ submitReview: any }> = (props) => {
                     </div>
                 </form>
             }
-
         </div>
     );
 }
