@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -124,7 +125,8 @@ public class BookController {
             @RequestParam(defaultValue = "0") Integer offset,
             @RequestParam(defaultValue = "9") Integer limit
     ) {
-        Page<HistoryDto> histories = bookService.findLoansHistoryByUserEmail(userEmail, PageRequest.of(offset, limit));
+        var sortOrder = Sort.by("checkout_date").descending();
+        Page<HistoryDto> histories = bookService.findLoansHistoryByUserEmail(userEmail, PageRequest.of(offset, limit, sortOrder));
         return ResponseEntity.ok().body(histories);
     }
 }
