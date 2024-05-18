@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
 import {ReviewApi} from "../../../apis/reviewApi";
 import {ReviewModel} from "../../../models/ReviewModel";
@@ -37,11 +37,11 @@ export const ReviewListPage = () => {
             setIsLoading(false);
             setHttpError(error.message);
         })
-    }, [currentPage]);
+    }, [currentPage, bookId]);
 
     if (isLoading) {
         return (
-            <SpinnerLoading />
+            <SpinnerLoading/>
         )
     }
 
@@ -58,14 +58,16 @@ export const ReviewListPage = () => {
             <div>
                 <h3>Comments: ({reviews.length})</h3>
             </div>
-            <PaginationProgress currentPage={currentPage} totalAmountOfItems={totalAmountOfReviews} totalPages={totalPages} itemsPerPage={reviewsPerPage}/>
+            <PaginationProgress currentPage={currentPage} totalAmountOfItems={totalAmountOfReviews}
+                                totalPages={totalPages} itemsPerPage={reviewsPerPage}/>
             <div className="row">
                 {reviews.map(review => (
-                    <Review review={review} key={review.id} />
+                    <Review review={review} key={review.id}/>
                 ))}
             </div>
 
-            {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} paginate={setCurrentPage} />}
+            {totalPages > 1 &&
+                <Pagination currentPage={currentPage} totalPages={totalPages} paginate={setCurrentPage}/>}
         </div>
     );
 }

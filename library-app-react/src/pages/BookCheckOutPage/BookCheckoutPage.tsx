@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {BookModel} from "../../models/BookModel";
 import {SpinnerLoading} from "../../common/SpinnerLoading/SpinnerLoading";
-import {BookApi} from "../../apis/bookApi";
+import {BookApi, BookUpdateType} from "../../apis/bookApi";
 import {useParams} from "react-router-dom";
 import {StarsReview} from "./components/StarsReview";
 import {CheckoutAndReviewBox} from "./components/CheckoutAndReviewBox";
@@ -79,7 +79,7 @@ export const BookCheckoutPage = () => {
 
     useEffect(() => {
         const fetchUserCurrentLoansCount = async () => {
-            const currentLoansCountResponse = await BookApi.getUserCurrentLoansCount(authState);
+            const currentLoansCountResponse = await BookApi.getUserCurrentLoans(authState, true);
             setCurrentLoansCount(currentLoansCountResponse);
             setIsLoadingCurrentLoansCount(false);
         }
@@ -129,11 +129,11 @@ export const BookCheckoutPage = () => {
     }
 
     const checkoutBook = async () => {
-        await BookApi.putCheckoutBook(authState, bookId);
+        await BookApi.updateBook(authState, bookId, BookUpdateType.Checkout);
         setIsCheckedOut(true);
     }
 
-    const submitReview = async (starInput: number, reviewDescription: string)=> {
+    const submitReview = async (starInput: number, reviewDescription: string) => {
         await ReviewApi.postSubmitReview(authState, bookId, starInput, reviewDescription);
         setIsReviewLeft(true);
     }

@@ -17,9 +17,10 @@ export const BookApi = {
         const response = await fetch(`${BASE_URL}/books/${bookID}`);
         return response.json();
     },
-    async getUserCurrentLoansCount(authState: any) {
+    async getUserCurrentLoans(authState: any, getCount = false) {
         if (authState && authState.isAuthenticated) {
-            const url = `${BASE_URL}/books/secure/currentloans/count`;
+            const endpoint = getCount ? '/count' : '';
+            const url = `${BASE_URL}/books/secure/currentloans${endpoint}`;
             const requestOptions = {
                 method: 'GET',
                 headers: {
@@ -27,11 +28,11 @@ export const BookApi = {
                     'Content-Type': 'application/json'
                 }
             };
-            const currentLoansCountResponse = await fetch(url, requestOptions);
-            if (!currentLoansCountResponse.ok) {
+            const currentLoansResponse = await fetch(url, requestOptions);
+            if (!currentLoansResponse.ok) {
                 throw new Error('Something went wrong!');
             }
-            return currentLoansCountResponse.json();
+            return currentLoansResponse.json();
         } else {
             throw new Error('User is not authenticated');
         }
@@ -84,11 +85,25 @@ export const BookApi = {
             throw new Error('User is not authenticated');
         }
     },
-    async putCheckoutBook(authState: any, bookId: string | undefined) {
+    async updateBook(authState: any, bookId: number | string | undefined, updateType: BookUpdateType) {
         if (!bookId) {
             throw new Error("Book ID is missing");
         }
-        const url = `${BASE_URL}/books/secure/checkout/?bookId=${bookId}`;
+        // Determine the endpoint based on the updateType
+        const endpointMap: { [key in BookUpdateType]: string } = {
+            [BookUpdateType.Checkout]: 'checkout',
+            [BookUpdateType.Return]: 'return',
+            [BookUpdateType.Renew]: 'renew/loan'
+        };
+
+        // Get the endpoint from the map
+        const endpoint = endpointMap[updateType];
+        if (!endpoint) {
+            throw new Error('Invalid update type');
+        }
+
+        // Construct the URL
+        const url = `${BASE_URL}/books/secure/${endpoint}/?bookId=${bookId}`;
         const requestOptions = {
             method: 'PUT',
             headers: {
@@ -102,3 +117,9 @@ export const BookApi = {
         }
     },
 };
+
+export enum BookUpdateType {
+    Checkout = 'checkout',
+    Return = 'return',
+    Renew = 'renew'
+}
