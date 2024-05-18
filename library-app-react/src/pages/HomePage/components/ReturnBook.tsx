@@ -23,7 +23,7 @@ export const ReturnBook: React.FC<{ book: BookModel }> = ({book}) => {
                 }
                 <h6 className='mt-2'>{book.title}</h6>
                 <p>{book.author}</p>
-                <Link className='btn main-color text-white' to={`checkout/${book.id}`}>Reserve</Link>
+                <Link className='btn main-color text-white' to={`/checkout/${book.id}`}>Reserve</Link>
             </div>
         </div>
     );
