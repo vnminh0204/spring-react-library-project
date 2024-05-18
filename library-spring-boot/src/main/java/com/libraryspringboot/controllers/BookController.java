@@ -89,6 +89,7 @@ public class BookController {
         return ResponseEntity.ok().body(bookService.currentLoansCount(userEmail));
     }
 
+    @CrossOrigin
     @GetMapping("/secure/currentloans")
     public List<ShelfCurrentLoansResponse> currentLoans(
             Authentication authentication
@@ -97,6 +98,7 @@ public class BookController {
         return bookService.currentLoans(userEmail);
     }
 
+//    @CrossOrigin
 //    @PutMapping("/secure/renew/loan")
 //    public void renewLoan(
 //            Authentication authentication,
