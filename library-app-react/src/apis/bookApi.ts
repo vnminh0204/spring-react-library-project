@@ -1,5 +1,11 @@
 import {BASE_URL} from "../configs/env";
 
+export enum BookUpdateType {
+    Checkout = 'checkout',
+    Return = 'return',
+    Renew = 'renew'
+}
+
 export const BookApi = {
 
     async getAllBooks(offset = 0, limit = 9, searchUrl = '') {
@@ -116,10 +122,20 @@ export const BookApi = {
             throw new Error('Something went wrong!');
         }
     },
+    async getUserHistory(authState: any, offset = 0, limit: 5) {
+        if (authState && authState.isAuthenticated) {
+            const url = `${BASE_URL}/books/histories/search/findBooksByUserEmail/?userEmail=${authState.accessToken?.claims.sub}&offset=${offset}&limit=${limit}`;
+            const requestOptions = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            const historyResponse = await fetch(url, requestOptions);
+            if (!historyResponse.ok) {
+                throw new Error('Something went wrong!');
+            }
+            return historyResponse.json();
+        }
+    },
 };
-
-export enum BookUpdateType {
-    Checkout = 'checkout',
-    Return = 'return',
-    Renew = 'renew'
-}
