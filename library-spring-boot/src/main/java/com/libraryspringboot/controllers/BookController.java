@@ -1,6 +1,7 @@
 package com.libraryspringboot.controllers;
 
 import com.libraryspringboot.dto.BookDto;
+import com.libraryspringboot.dto.HistoryDto;
 import com.libraryspringboot.models.ShelfCurrentLoansResponse;
 import com.libraryspringboot.services.BookService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -114,5 +115,16 @@ public class BookController {
             @RequestParam Long bookId) throws Exception {
         String userEmail = authentication.getName();
         bookService.renewLoan(userEmail, bookId);
+    }
+
+    @CrossOrigin
+    @GetMapping("histories/search/findBooksByUserEmail/")
+    ResponseEntity<Page<HistoryDto>> findLoansHistoryByUserEmail(
+            @RequestParam() String userEmail,
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "9") Integer limit
+    ) {
+        Page<HistoryDto> histories = bookService.findLoansHistoryByUserEmail(userEmail, PageRequest.of(offset, limit));
+        return ResponseEntity.ok().body(histories);
     }
 }

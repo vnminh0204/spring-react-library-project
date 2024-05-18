@@ -1,17 +1,18 @@
 package com.libraryspringboot.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(name = "History")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +37,8 @@ public class History {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "img")
+    @Lob()
+    @Column(name = "img", length = 1000000)
     private String img;
 }
 

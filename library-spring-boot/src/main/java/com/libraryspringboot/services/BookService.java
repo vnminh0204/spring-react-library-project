@@ -1,6 +1,7 @@
 package com.libraryspringboot.services;
 
 import com.libraryspringboot.dto.BookDto;
+import com.libraryspringboot.dto.HistoryDto;
 import com.libraryspringboot.models.ShelfCurrentLoansResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,4 +29,6 @@ public interface BookService {
     void renewLoan(String userEmail, Long bookId) throws Exception;
 
     void returnBook(String userEmail, Long bookId) throws Exception;
+
+    Page<HistoryDto> findLoansHistoryByUserEmail(String userEmail, Pageable pageRequest);
 }

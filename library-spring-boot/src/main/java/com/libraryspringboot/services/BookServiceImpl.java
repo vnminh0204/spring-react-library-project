@@ -1,11 +1,14 @@
 package com.libraryspringboot.services;
 
 import com.libraryspringboot.dto.BookDto;
+import com.libraryspringboot.dto.HistoryDto;
 import com.libraryspringboot.entities.Book;
 import com.libraryspringboot.entities.Checkout;
+import com.libraryspringboot.entities.History;
 import com.libraryspringboot.models.ShelfCurrentLoansResponse;
 import com.libraryspringboot.repos.BookRepository;
 import com.libraryspringboot.repos.CheckoutRepository;
+import com.libraryspringboot.repos.HistoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,6 +34,8 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     private final CheckoutRepository checkoutRepository;
+
+    private final HistoryRepository historyRepository;
 
     @Override
     public Page<BookDto> getAllBooks(Pageable pageRequest) {
@@ -157,7 +162,7 @@ public class BookServiceImpl implements BookService {
 
         Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
 
-        if (!book.isPresent() || validateCheckout == null) {
+        if (book.isEmpty() || validateCheckout == null) {
             throw new Exception("Book does not exist or not checked out by user");
         }
 
@@ -166,16 +171,23 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(book.get());
         checkoutRepository.deleteById(validateCheckout.getId());
 
-//        History history = new History(
-//                userEmail,
-//                validateCheckout.getCheckoutDate(),
-//                LocalDate.now().toString(),
-//                book.get().getTitle(),
-//                book.get().getAuthor(),
-//                book.get().getDescription(),
-//                book.get().getImg()
-//        );
-//
-//        historyRepository.save(history);
+        History history = History.builder()
+                .userEmail(userEmail)
+                .checkoutDate(validateCheckout.getCheckoutDate())
+                .returnedDate(LocalDate.now().toString())
+                .title(book.get().getTitle())
+                .author(book.get().getAuthor())
+                .description(book.get().getDescription())
+                .img(book.get().getImg())
+                .build();
+
+        historyRepository.save(history);
+    }
+
+    @Override
+    public Page<HistoryDto> findLoansHistoryByUserEmail(String userEmail, Pageable pageRequest) {
+        log.info("Get all loans history");
+        Page<History> histories = historyRepository.findBooksByUserEmail(userEmail, pageRequest);
+        return histories.map(entity -> modelMapper.map(entity, HistoryDto.class));
     }
 }
