@@ -1,8 +1,11 @@
 package com.libraryspringboot.services;
 
 import com.libraryspringboot.dto.BookDto;
+import com.libraryspringboot.models.ShelfCurrentLoansResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 
 public interface BookService {
@@ -19,4 +22,6 @@ public interface BookService {
     Boolean checkoutBookByUser(String userEmail, Long bookId);
 
     Integer currentLoansCount(String userEmail);
+
+    List<ShelfCurrentLoansResponse> currentLoans(String uesrEmail) throws Exception;
 }

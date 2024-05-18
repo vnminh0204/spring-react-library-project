@@ -1,6 +1,7 @@
 package com.libraryspringboot.controllers;
 
 import com.libraryspringboot.dto.BookDto;
+import com.libraryspringboot.models.ShelfCurrentLoansResponse;
 import com.libraryspringboot.services.BookService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Tag(name = "Book")
@@ -85,4 +88,20 @@ public class BookController {
         String userEmail = authentication.getName();
         return ResponseEntity.ok().body(bookService.currentLoansCount(userEmail));
     }
+
+    @GetMapping("/secure/currentloans")
+    public List<ShelfCurrentLoansResponse> currentLoans(
+            Authentication authentication
+    ) throws Exception {
+        String userEmail = authentication.getName();
+        return bookService.currentLoans(userEmail);
+    }
+
+//    @PutMapping("/secure/renew/loan")
+//    public void renewLoan(
+//            Authentication authentication,
+//            @RequestParam Long bookId) throws Exception {
+//        String userEmail = authentication.getName();
+//        bookService.renewLoan(userEmail, bookId);
+//    }
 }

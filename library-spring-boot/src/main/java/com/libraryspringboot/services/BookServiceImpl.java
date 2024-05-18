@@ -3,6 +3,7 @@ package com.libraryspringboot.services;
 import com.libraryspringboot.dto.BookDto;
 import com.libraryspringboot.entities.Book;
 import com.libraryspringboot.entities.Checkout;
+import com.libraryspringboot.models.ShelfCurrentLoansResponse;
 import com.libraryspringboot.repos.BookRepository;
 import com.libraryspringboot.repos.CheckoutRepository;
 import jakarta.transaction.Transactional;
@@ -13,8 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -90,5 +94,40 @@ public class BookServiceImpl implements BookService {
     @Override
     public Integer currentLoansCount(String userEmail) {
         return checkoutRepository.findBooksByUserEmail(userEmail).size();
+    }
+
+    @Override
+    public List<ShelfCurrentLoansResponse> currentLoans(String userEmail) throws Exception {
+
+        List<ShelfCurrentLoansResponse> shelfCurrentLoansResponses = new ArrayList<>();
+
+        List<Checkout> checkoutList = checkoutRepository.findBooksByUserEmail(userEmail);
+
+        List<Long> bookIdList = checkoutList.stream()
+                .map(Checkout::getBookId)
+                .collect(Collectors.toList());
+
+        List<Book> books = bookRepository.findBooksByBookIds(bookIdList);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (Book book : books) {
+            Optional<Checkout> checkout = checkoutList.stream()
+                    .filter(x -> Objects.equals(x.getBookId(), book.getId())).findFirst();
+
+            if (checkout.isPresent()) {
+
+                Date returnDate = sdf.parse(checkout.get().getReturnDate());
+                Date currentDate = sdf.parse(LocalDate.now().toString());
+
+                TimeUnit time = TimeUnit.DAYS;
+
+                long difference_In_Time = time.convert(returnDate.getTime() - currentDate.getTime(),
+                        TimeUnit.MILLISECONDS);
+
+                shelfCurrentLoansResponses.add(new ShelfCurrentLoansResponse(modelMapper.map(book, BookDto.class), difference_In_Time));
+            }
+        }
+        return shelfCurrentLoansResponses;
     }
 }
