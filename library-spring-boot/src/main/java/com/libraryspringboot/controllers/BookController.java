@@ -61,16 +61,6 @@ public class BookController {
     }
 
     @CrossOrigin
-    @PutMapping("/secure/checkout/")
-    public ResponseEntity<BookDto> checkoutBook(
-            Authentication authentication,
-            @RequestParam Long bookId
-    ) throws Exception {
-        String userEmail = authentication.getName();
-        return ResponseEntity.ok().body(bookService.checkoutBook(userEmail, bookId));
-    }
-
-    @CrossOrigin
     @GetMapping("secure/ischeckedout/byuser/")
     public ResponseEntity<Boolean> checkoutBookByUser(
             Authentication authentication,
@@ -98,12 +88,31 @@ public class BookController {
         return bookService.currentLoans(userEmail);
     }
 
-//    @CrossOrigin
-//    @PutMapping("/secure/renew/loan")
-//    public void renewLoan(
-//            Authentication authentication,
-//            @RequestParam Long bookId) throws Exception {
-//        String userEmail = authentication.getName();
-//        bookService.renewLoan(userEmail, bookId);
-//    }
+    @CrossOrigin
+    @PutMapping("/secure/checkout/")
+    public ResponseEntity<BookDto> checkoutBook(
+            Authentication authentication,
+            @RequestParam Long bookId
+    ) throws Exception {
+        String userEmail = authentication.getName();
+        return ResponseEntity.ok().body(bookService.checkoutBook(userEmail, bookId));
+    }
+
+    @CrossOrigin
+    @PutMapping("/secure/return/")
+    public void returnBook(
+            Authentication authentication,
+            @RequestParam Long bookId) throws Exception {
+        String userEmail = authentication.getName();
+        bookService.returnBook(userEmail, bookId);
+    }
+
+    @CrossOrigin
+    @PutMapping("/secure/renew/loan/")
+    public void renewLoan(
+            Authentication authentication,
+            @RequestParam Long bookId) throws Exception {
+        String userEmail = authentication.getName();
+        bookService.renewLoan(userEmail, bookId);
+    }
 }

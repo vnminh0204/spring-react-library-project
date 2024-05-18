@@ -130,4 +130,52 @@ public class BookServiceImpl implements BookService {
         }
         return shelfCurrentLoansResponses;
     }
+
+    @Override
+    public void renewLoan(String userEmail, Long bookId) throws Exception {
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
+
+        if (validateCheckout == null) {
+            throw new Exception("Book does not exist or not checked out by user");
+        }
+
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date returnDate = sdFormat.parse(validateCheckout.getReturnDate());
+        Date currentDate = sdFormat.parse(LocalDate.now().toString());
+
+        if (returnDate.compareTo(currentDate) > 0 || returnDate.compareTo(currentDate) == 0) {
+            validateCheckout.setReturnDate(LocalDate.now().plusDays(7).toString());
+            checkoutRepository.save(validateCheckout);
+        }
+    }
+
+    @Override
+    public void returnBook(String userEmail, Long bookId) throws Exception {
+
+        Optional<Book> book = bookRepository.findById(bookId);
+
+        Checkout validateCheckout = checkoutRepository.findByUserEmailAndBookId(userEmail, bookId);
+
+        if (!book.isPresent() || validateCheckout == null) {
+            throw new Exception("Book does not exist or not checked out by user");
+        }
+
+        book.get().setCopiesAvailable(book.get().getCopiesAvailable() + 1);
+
+        bookRepository.save(book.get());
+        checkoutRepository.deleteById(validateCheckout.getId());
+
+//        History history = new History(
+//                userEmail,
+//                validateCheckout.getCheckoutDate(),
+//                LocalDate.now().toString(),
+//                book.get().getTitle(),
+//                book.get().getAuthor(),
+//                book.get().getDescription(),
+//                book.get().getImg()
+//        );
+//
+//        historyRepository.save(history);
+    }
 }
