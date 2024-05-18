@@ -7,6 +7,9 @@ import com.libraryspringboot.repos.MessageRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,6 +19,8 @@ import java.util.Optional;
 @Log4j2
 @Transactional
 public class MessagesServiceImpl implements MessagesService {
+
+    private final ModelMapper modelMapper;
 
     private final MessageRepository messageRepository;
 
@@ -40,5 +45,12 @@ public class MessagesServiceImpl implements MessagesService {
         message.get().setResponse(adminQuestionRequest.getResponse());
         message.get().setClosed(true);
         messageRepository.save(message.get());
+    }
+
+    @Override
+    public Page<MessageDto> getMessagesByUserEmail(String userEmail, Pageable pageRequest) {
+        log.info("Get all loans history");
+        Page<Message> messages = messageRepository.findByUserEmail(userEmail, pageRequest);
+        return messages.map(entity -> modelMapper.map(entity, MessageDto.class));
     }
 }
