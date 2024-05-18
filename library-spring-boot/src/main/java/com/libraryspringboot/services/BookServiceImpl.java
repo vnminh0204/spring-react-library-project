@@ -76,14 +76,12 @@ public class BookServiceImpl implements BookService {
         book.get().setCopiesAvailable(book.get().getCopiesAvailable() - 1);
         bookRepository.save(modelMapper.map(book.get(), Book.class));
 
-        Checkout checkout = new Checkout(
-                null,
-                userEmail,
-                LocalDate.now().toString(),
-                LocalDate.now().plusDays(7).toString(),
-                book.get().getId()
-        );
-
+        Checkout checkout = Checkout.builder()
+                .userEmail(userEmail)
+                .checkoutDate(LocalDate.now().toString())
+                .returnDate(LocalDate.now().plusDays(7).toString())
+                .bookId(book.get().getId())
+                .build();
         checkoutRepository.save(checkout);
 
         return book.get();

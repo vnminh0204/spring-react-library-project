@@ -38,14 +38,15 @@ public class ReviewServiceImpl implements ReviewService {
             throw new Exception("Review already exists");
         }
 
-        Review review = new Review();
-        review.setUserEmail(userEmail);
-        review.setBookId(reviewRequest.getBookId());
-        review.setRating(reviewRequest.getRating());
+        Review review = Review.builder()
+                .userEmail(userEmail)
+                .bookId(reviewRequest.getBookId())
+                .rating(reviewRequest.getRating())
+                .date(Date.valueOf(LocalDate.now()))
+                .build();
         if (reviewRequest.getReviewDescription().isPresent()) {
             review.setReviewDescription(reviewRequest.getReviewDescription().map(Object::toString).orElse(null));
         }
-        review.setDate(Date.valueOf(LocalDate.now()));
         reviewRepository.save(review);
     }
 

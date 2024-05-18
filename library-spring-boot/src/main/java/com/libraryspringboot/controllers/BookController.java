@@ -125,7 +125,7 @@ public class BookController {
             @RequestParam(defaultValue = "0") Integer offset,
             @RequestParam(defaultValue = "9") Integer limit
     ) {
-        var sortOrder = Sort.by("checkout_date").descending();
+        var sortOrder = Sort.by("checkoutDate").descending();
         Page<HistoryDto> histories = bookService.findLoansHistoryByUserEmail(userEmail, PageRequest.of(offset, limit, sortOrder));
         return ResponseEntity.ok().body(histories);
     }

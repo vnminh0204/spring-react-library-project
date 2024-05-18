@@ -7,11 +7,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "book")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
 
     @Id
@@ -37,6 +43,7 @@ public class Book {
     @Column(name = "category")
     private String category;
 
+    @Lob
     @Column(name = "img", length = 1000000)
     private String img;
 }
