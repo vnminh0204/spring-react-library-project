@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,17 @@ public class MessagesController {
     private final MessagesService messagesService;
 
     @CrossOrigin
+    @GetMapping("")
+    ResponseEntity<Page<MessageDto>> getAllMessages(
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "9") Integer limit
+    ) {
+        var sortOrder = Sort.by("id").descending();
+        Page<MessageDto> messages = messagesService.getAllMessages(PageRequest.of(offset, limit, sortOrder));
+        return ResponseEntity.ok().body(messages);
+    }
+
+    @CrossOrigin
     @GetMapping("/search/findByUserEmail/")
     ResponseEntity<Page<MessageDto>> getMessagesByUserEmail(
             @RequestParam() String userEmail,
@@ -30,6 +42,19 @@ public class MessagesController {
         // Latest messages will appear first
         var sortOrder = Sort.by("id").descending();
         Page<MessageDto> messages = messagesService.getMessagesByUserEmail(userEmail, PageRequest.of(offset, limit, sortOrder));
+        return ResponseEntity.ok().body(messages);
+    }
+
+    @CrossOrigin
+    @GetMapping("/search/findByClosed/")
+    ResponseEntity<Page<MessageDto>> getMessagesByClosed(
+            @RequestParam() Boolean closed,
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "9") Integer limit
+    ) {
+        // Latest messages will appear first
+        var sortOrder = Sort.by("id").descending();
+        Page<MessageDto> messages = messagesService.getMessagesByClosed(closed, PageRequest.of(offset, limit, sortOrder));
         return ResponseEntity.ok().body(messages);
     }
 
@@ -46,12 +71,13 @@ public class MessagesController {
     @PutMapping("/secure/admin/message")
     public void putMessage(
             Authentication authentication,
-            @RequestBody AdminQuestionRequest adminQuestionRequest) throws Exception {
+            @RequestBody AdminQuestionRequest adminQuestionRequest
+    ) throws Exception {
         String userEmail = authentication.getName();
-        String admin = "";
-//                ExtractJWT.payloadJWTExtraction(token, "\"userType\"");
-        if (admin == null || !admin.equals("admin")) {
-            throw new Exception("Administration page only.");
+        var claims = ((Jwt) authentication.getPrincipal()).getClaims();
+        var userType = ((String) claims.get("userType")).toLowerCase();
+        if (userType == null || !userType.equals("admin")) {
+            throw new Exception("Administration page only");
         }
         messagesService.putMessage(adminQuestionRequest, userEmail);
     }

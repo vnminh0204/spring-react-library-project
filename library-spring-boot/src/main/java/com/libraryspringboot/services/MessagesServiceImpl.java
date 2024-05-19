@@ -25,6 +25,13 @@ public class MessagesServiceImpl implements MessagesService {
     private final MessageRepository messageRepository;
 
     @Override
+    public Page<MessageDto> getAllMessages(Pageable pageRequest) {
+        log.info("Get all messages");
+        Page<Message> messages = messageRepository.findAll(pageRequest);
+        return messages.map(entity -> modelMapper.map(entity, MessageDto.class));
+    }
+
+    @Override
     public void postMessage(MessageDto messageRequest, String userEmail) {
         Message message = Message.builder()
                 .title(messageRequest.getTitle())
@@ -49,8 +56,15 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     public Page<MessageDto> getMessagesByUserEmail(String userEmail, Pageable pageRequest) {
-        log.info("Get all loans history");
+        log.info("Get all messages for {}", userEmail);
         Page<Message> messages = messageRepository.findByUserEmail(userEmail, pageRequest);
+        return messages.map(entity -> modelMapper.map(entity, MessageDto.class));
+    }
+
+    @Override
+    public Page<MessageDto> getMessagesByClosed(Boolean closed, Pageable pageRequest) {
+        log.info("Get all closed messages");
+        Page<Message> messages = messageRepository.findByClosed(closed, pageRequest);
         return messages.map(entity -> modelMapper.map(entity, MessageDto.class));
     }
 }
