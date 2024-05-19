@@ -46,12 +46,12 @@ export const Loans = () => {
         );
     }
 
-    async function returnBook(bookId: number) {
+    const returnBook = async (bookId: number) => {
         await BookApi.updateBook(authState, bookId, BookUpdateType.Return);
         setCheckout(!checkout);
     }
 
-    async function renewLoan(bookId: number) {
+    const renewLoan = async (bookId: number) => {
         await BookApi.updateBook(authState, bookId, BookUpdateType.Renew);
         setCheckout(!checkout);
     }

@@ -12,6 +12,7 @@ import OktaSignInWidget from "./common/Auth/OktaSignInWidget";
 import {ReviewListPage} from "./pages/BookCheckOutPage/ReviewListPage/ReviewListPage";
 import {ShelfPage} from "./pages/ShelfPage/ShelfPage";
 import {ProtectedRoute} from "./common/ProtectedRoute/ProtectedRoute";
+import {MessagesPage} from "./pages/MessagesPage/MessagesPage";
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -41,6 +42,11 @@ export function App() {
                     <Route path='shelf' element={
                         <ProtectedRoute redirectPath={"/login"}>
                             <ShelfPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path='messages' element={
+                        <ProtectedRoute redirectPath={"/login"}>
+                            <MessagesPage/>
                         </ProtectedRoute>
                     }/>
                 </Route>

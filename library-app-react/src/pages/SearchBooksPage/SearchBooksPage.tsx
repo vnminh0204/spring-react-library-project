@@ -6,6 +6,7 @@ import {SpinnerLoading} from "../../common/SpinnerLoading/SpinnerLoading";
 import {SearchBook} from "./components/SearchBook";
 import {Pagination} from "../../common/Pagination/Pagination";
 import {PaginationProgress} from "../../common/Pagination/PaginationProgress";
+import {Link} from "react-router-dom";
 
 export const SearchBooksPage = () => {
 
@@ -136,7 +137,8 @@ export const SearchBooksPage = () => {
                                 <div className='mt-3'>
                                     <h5>Number of results: ({totalAmountOfBooks})</h5>
                                 </div>
-                                <PaginationProgress currentPage={currentPage} totalAmountOfItems={totalAmountOfBooks} totalPages={totalPages} itemsPerPage={booksPerPage}/>
+                                <PaginationProgress currentPage={currentPage} totalAmountOfItems={totalAmountOfBooks}
+                                                    totalPages={totalPages} itemsPerPage={booksPerPage}/>
                                 {books.map(book => (
                                     <SearchBook book={book} key={book.id}/>
                                 ))}
@@ -146,10 +148,10 @@ export const SearchBooksPage = () => {
                                 <h3>
                                     Can't find what you are looking for?
                                 </h3>
-                                <a type='button' className='btn main-color btn-md px-4 me-md-2 fw-bold text-white'
-                                   href='#'>
+                                <Link type='button' className='btn main-color btn-md px-4 me-md-2 fw-bold text-white'
+                                      to={'/messages'}>
                                     Library Services
-                                </a>
+                                </Link>
                             </div>
                     }
                     {/* Return pagination only if there are more than 1 page*/}
