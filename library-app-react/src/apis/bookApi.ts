@@ -1,9 +1,16 @@
 import {BASE_URL} from "../configs/env";
+import {AddBookRequest} from "../models/AddBookRequest";
 
 export enum BookUpdateType {
     Checkout = 'checkout',
     Return = 'return',
     Renew = 'renew'
+}
+
+export enum AdminBookUpdateType {
+    Increase = 'increase',
+    Decrease = 'decrease',
+    Delete = 'delete',
 }
 
 export const BookApi = {
@@ -138,4 +145,56 @@ export const BookApi = {
             return historyResponse.json();
         }
     },
+    async adminAddBook(authState: any, body: AddBookRequest) {
+        if (!authState || !authState.isAuthenticated) throw new Error("User doesn't not login");
+        if (!body || Object.keys(body).length === 0) {
+            throw new Error('Request body is empty!');
+        }
+        const url = `${BASE_URL}/admin/secure/add/book`;
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        };
+
+        const submitNewBookResponse = await fetch(url, requestOptions);
+
+        if (!submitNewBookResponse.ok) {
+            throw new Error('Something went wrong!');
+        }
+    },
+    async adminUpdateBook(authState: any, bookId: number | string | undefined, updateType: AdminBookUpdateType) {
+        const endpointMap: { [key in AdminBookUpdateType]: { method: string, path: string } } = {
+            [AdminBookUpdateType.Increase]: {method: 'PUT', path: 'increase/book/quantity'},
+            [AdminBookUpdateType.Decrease]: {method: 'PUT', path: 'decrease/book/quantity'},
+            [AdminBookUpdateType.Delete]: {method: 'DELETE', path: 'delete/book'},
+        };
+        if (!bookId) {
+            throw new Error("Book ID is missing");
+        }
+
+        const endpointConfig = endpointMap[updateType];
+        if (!endpointConfig) {
+            throw new Error('Invalid update type');
+        }
+
+        const url = `${BASE_URL}/admin/secure/${endpointConfig.path}/?bookId=${bookId}`;
+        const requestOptions: RequestInit = {
+            method: endpointConfig.method,
+            headers: {
+                Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        const response = await fetch(url, requestOptions);
+        if (!response.ok) {
+            throw new Error('Something went wrong!');
+        }
+
+        return response;
+    }
 };

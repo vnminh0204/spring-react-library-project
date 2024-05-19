@@ -1,6 +1,7 @@
 import {useOktaAuth} from "@okta/okta-react";
 import {useState} from "react";
 import {MessagesApi} from "../../../apis/messagesApi";
+import {MessageModel} from "../../../models/MessageModel";
 
 export const PostNewMessage = () => {
 
@@ -12,7 +13,8 @@ export const PostNewMessage = () => {
 
     const submitNewQuestion = async () => {
         if (authState?.isAuthenticated && title !== '' && question !== '') {
-            await MessagesApi.postMessage(authState, title, question);
+            const messageRequestModel: MessageModel = {title, question};
+            await MessagesApi.userPostMessage(authState, messageRequestModel);
             setTitle('');
             setQuestion('');
             setDisplayWarning(false);

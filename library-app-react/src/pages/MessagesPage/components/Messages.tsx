@@ -21,11 +21,16 @@ export const Messages = () => {
 
     useEffect(() => {
         const fetchUserMessages = async () => {
-            const responseData = await MessagesApi.getMessages(authState, currentPage - 1, messagesPerPage);
-            const loadedMessages: MessageModel[] = responseData.content as MessageModel[];
-            setMessages(loadedMessages);
-            setTotalPages(responseData.totalPages);
-            setIsLoadingMessages(false);
+            if (authState && authState?.isAuthenticated) {
+                const searchUrl = `/search/findByUserEmail/?userEmail=${authState?.accessToken?.claims.sub}`;
+                const responseData = await MessagesApi.getMessages(authState, currentPage - 1, messagesPerPage, searchUrl);
+                const loadedMessages: MessageModel[] = responseData.content as MessageModel[];
+                setMessages(loadedMessages);
+                setTotalPages(responseData.totalPages);
+                setIsLoadingMessages(false);
+            } else {
+                throw new Error('User does not log in!');
+            }
         }
         fetchUserMessages().catch((error: any) => {
             setIsLoadingMessages(false);
