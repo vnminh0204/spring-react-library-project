@@ -37,7 +37,7 @@ export const Heros = () => {
                             <p className='lead'>
                                 Try to check in daily as our collection is always changing!
                                 We work nonstop to provide the most accurate book selection possible
-                                for our Luv 2 Read students! We are diligent about our book selection
+                                for our customers! We are diligent about our book selection
                                 and our books are always going to be our
                                 top priority.
                             </p>
@@ -76,7 +76,7 @@ export const Heros = () => {
                             <p className='lead'>
                                 Try to check in daily as our collection is always changing!
                                 We work nonstop to provide the most accurate book selection possible
-                                for our Luv 2 Read students! We are diligent about our book selection
+                                for our customers! We are diligent about our book selection
                                 and our books are always going to be our
                                 top priority.
                             </p>

@@ -1,7 +1,7 @@
 import {AddBookRequest} from "../../../models/AddBookRequest";
 import {useState} from "react";
 import {useOktaAuth} from "@okta/okta-react";
-import {base64ConversionForImages} from "../../../utils/imageUtils";
+import {base64ConversionForImages} from "../../../utils/imageUploadUtils";
 import {BookApi} from "../../../apis/bookApi";
 
 export const AddNewBook = () => {
