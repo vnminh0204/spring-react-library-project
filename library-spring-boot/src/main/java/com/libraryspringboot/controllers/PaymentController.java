@@ -1,5 +1,6 @@
 package com.libraryspringboot.controllers;
 
+import com.libraryspringboot.dto.PaymentDto;
 import com.libraryspringboot.models.PaymentInfoRequest;
 import com.libraryspringboot.services.PaymentService;
 import com.stripe.exception.StripeException;
@@ -11,12 +12,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Tag(name = "Payent")
+@Tag(name = "Payment")
 @RequestMapping("/api/payment/secure")
 @RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
+
+    @CrossOrigin
+    @GetMapping("/search/findByUserEmail")
+    public ResponseEntity<PaymentDto> findPaymentByUserEmail(@RequestParam("userEmail") String userEmail) {
+        PaymentDto payment = paymentService.findPaymentsByUserEmail(userEmail);
+        return ResponseEntity.ok().body(payment);
+    }
 
     @CrossOrigin
     @PostMapping("/payment-intent")

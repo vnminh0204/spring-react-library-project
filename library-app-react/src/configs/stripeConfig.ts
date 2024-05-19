@@ -1,0 +1,1 @@
+export const STRIPE_PUBLISHABLE_KEY = "pk_test_51PIAwCE7OxYaklRZOhro8vWtF6y6MUfkUYM3ihY8xDojix16O8WfsSiNbR8BwyEJ8JMgWlfhUhJ8HemTqTUHgkzc00O2nczV11";

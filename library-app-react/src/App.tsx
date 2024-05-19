@@ -14,6 +14,7 @@ import {ShelfPage} from "./pages/ShelfPage/ShelfPage";
 import {ProtectedRoute} from "./common/ProtectedRoute/ProtectedRoute";
 import {MessagesPage} from "./pages/MessagesPage/MessagesPage";
 import {ManageLibraryPage} from "./pages/ManageLibraryPage/ManageLibraryPage";
+import {PaymentPage} from "./pages/PaymentPage/PaymentPage";
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -53,6 +54,11 @@ export function App() {
                     <Route path='admin' element={
                         <ProtectedRoute redirectPath={"/login"}>
                             <ManageLibraryPage/>
+                        </ProtectedRoute>
+                    }/>
+                    <Route path='fees' element={
+                        <ProtectedRoute redirectPath={"/login"}>
+                            <PaymentPage/>
                         </ProtectedRoute>
                     }/>
                 </Route>
