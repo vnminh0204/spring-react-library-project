@@ -3,7 +3,7 @@ import {ReviewRequestModel} from "../models/ReviewRequestModel";
 
 export const ReviewApi = {
 
-    async getReviewsByBookId(bookID: string  | undefined, offset = 0, limit = 2) {
+    async getReviewsByBookId(bookID: string | undefined, offset = 0, limit = 2) {
         if (!bookID) {
             throw new Error("Book ID is missing");
         }
@@ -11,8 +11,11 @@ export const ReviewApi = {
         return response.json();
     },
 
-    async postSubmitReview(authState: any, bookId: string | undefined, starInput: number, reviewDescription: string) {
-        const reviewRequestModel: ReviewRequestModel = {rating: starInput, bookId: Number(bookId), reviewDescription};
+    async postSubmitReview(authState: any, reviewRequestModel: ReviewRequestModel) {
+        if (!reviewRequestModel || Object.keys(reviewRequestModel).length === 0) {
+            throw new Error('Request body is empty!');
+        }
+
         const url = `${BASE_URL}/reviews/secure`;
         const requestOptions = {
             method: 'POST',

@@ -32,12 +32,22 @@ export const Navbar = () => {
                             <NavLink className='nav-link' to='/'>Home</NavLink>
                         </li>
                         <li className='nav-item'>
-                            <NavLink className='nav-link' to='search'>Search Books</NavLink>
+                            <NavLink className='nav-link' to='/search'>Search Books</NavLink>
                         </li>
-                        {authState.isAuthenticated &&
-                            <li className='nav-item'>
-                                <NavLink className='nav-link' to='shelf'>Shelf</NavLink>
-                            </li>
+                        {authState.isAuthenticated && (authState.accessToken?.claims?.userType === 'Admin' ?
+                            (<li className='nav-item'>
+                                <NavLink className='nav-link' to='/admin'>Admin</NavLink>
+                            </li>)
+                            :
+                            (
+                                <>
+                                    <li className='nav-item'>
+                                        <NavLink className='nav-link' to='/shelf'>Shelf</NavLink>
+                                    </li>
+                                    <li className='nav-item'>
+                                        <NavLink className='nav-link' to='/messages'>Library Services</NavLink>
+                                    </li>
+                                </>))
                         }
                     </ul>
                     <ul className='navbar-nav ms-auto'>

@@ -5,10 +5,12 @@ import {AdminMessageRequest} from "../models/AdminMessageRequest";
 export const MessagesApi = {
 
     async userPostMessage(authState: any, messageRequestModel: MessageModel) {
-        const url = `${BASE_URL}/messages/secure/add/message`;
         if (!messageRequestModel || Object.keys(messageRequestModel).length === 0) {
             throw new Error('Request body is empty!');
         }
+
+        const url = `${BASE_URL}/messages/secure/add/message`;
+
         const requestOptions = {
             method: 'POST',
             headers: {

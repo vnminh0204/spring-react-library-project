@@ -9,6 +9,7 @@ import {ReviewModel} from "../../models/ReviewModel";
 import {ReviewApi} from "../../apis/reviewApi";
 import {LatestReviews} from "./components/LatestReviews";
 import {useOktaAuth} from "@okta/okta-react";
+import {ReviewRequestModel} from "../../models/ReviewRequestModel";
 
 
 export const BookCheckoutPage = () => {
@@ -134,7 +135,8 @@ export const BookCheckoutPage = () => {
     }
 
     const submitReview = async (starInput: number, reviewDescription: string) => {
-        await ReviewApi.postSubmitReview(authState, bookId, starInput, reviewDescription);
+        const reviewRequestModel: ReviewRequestModel = {rating: starInput, bookId: Number(bookId), reviewDescription};
+        await ReviewApi.postSubmitReview(authState, reviewRequestModel);
         setIsReviewLeft(true);
     }
 
